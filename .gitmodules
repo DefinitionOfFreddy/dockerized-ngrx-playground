@@ -1,0 +1,3 @@
+[submodule "ngrx-course"]
+	path = ngrx-course
+	url = ./ngrx-course
