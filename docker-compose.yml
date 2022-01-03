@@ -1,24 +1,32 @@
 version: '3'
 services:
-  #api:
-  #  build:
-  #    dockerfile: Dockerfile
-  #  ports:
-  #    - "9000:9000"
-  #  container_name: node-server
-  #  volumes:
-  #     - ./ngrx-course:/usr/src/app/ngrx-course
-  #     - /usr/src/app/ngrx-course/node_modules
-  #  command:
-  #      bash -c "npm install && npm run server"
+  api:
+    build:
+      dockerfile: Dockerfile
+    ports:
+      - "9000:9000"
+    container_name: node-server
+    volumes:
+       - ./ngrx-course:/usr/src/app
+    command:
+        sh -c "npm install && npm run server"
   angular-ui:
     build:
       dockerfile: Dockerfile
+    deploy:
+      resources:
+        limits:
+          memory: 8G
+        reservations:
+          memory: 4G
     ports:
       - "4200:4200"
     container_name: angular-client
     volumes:
        - ./ngrx-course:/usr/src/app
-       #- /usr/src/app/node_modules
+       - type: bind
+         source: ./proxy
+         target: /usr/proxy-conf
+         read_only: true
     command:
-        sh -c "npm install && npm start"
+        sh -c "npm install && ng serve --port 4200 --host=0.0.0.0 --proxy-config /usr/proxy-conf/proxy-dev.json"
