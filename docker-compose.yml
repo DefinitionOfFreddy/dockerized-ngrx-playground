@@ -2,6 +2,7 @@ version: '3'
 services:
   api:
     build:
+      context: '.'
       dockerfile: Dockerfile
     ports:
       - "9000:9000"
@@ -12,6 +13,7 @@ services:
         sh -c "npm install && npm run server"
   angular-ui:
     build:
+      context: '.'
       dockerfile: Dockerfile
     deploy:
       resources:
